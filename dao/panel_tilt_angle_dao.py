@@ -30,3 +30,9 @@ class PanelTiltAngleDAO:
         cur.execute("DELETE FROM panel_tilt_angle WHERE id = %s", (tilt_angle_id,))
         self.mysql.connection.commit()
         cur.close()
+
+    def call_insert_tilt_angle_batch(self):
+        cur = self.mysql.connection.cursor()
+        cur.callproc('insert_panel_tilt_angle_batch') 
+        self.mysql.connection.commit()
+        cur.close()

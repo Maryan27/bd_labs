@@ -42,4 +42,12 @@ def create_panel_tilt_angle_controller(mysql):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    @panel_tilt_angle_controller.route('/panel_tilt_angle/add_batch', methods=['POST'])
+    def add_tilt_angle_batch():
+        try:
+            service.add_tilt_angle_batch()  # Виклик методу Service
+            return jsonify({"message": "10 tilt angles added successfully"}), 201
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
     return panel_tilt_angle_controller

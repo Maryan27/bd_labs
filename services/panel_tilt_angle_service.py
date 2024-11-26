@@ -15,3 +15,7 @@ class PanelTiltAngleService:
 
     def remove_tilt_angle(self, tilt_angle_id):
         return self.dao.delete_tilt_angle(tilt_angle_id)
+    
+      # Метод для виклику процедури
+    def add_tilt_angle_batch(self):
+        self.dao.call_insert_tilt_angle_batch()

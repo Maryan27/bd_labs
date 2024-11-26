@@ -1,10 +1,11 @@
 class EnergySales:
-    def __init__(self, id, station_id, energy_sold, price_per_kWh, timestamp):
+    def __init__(self, id, station_id, energy_sold, price_per_kWh, timestamp, discount_id=None):
         self.id = id
         self.station_id = station_id
         self.energy_sold = energy_sold
         self.price_per_kWh = price_per_kWh
         self.timestamp = timestamp
+        self.discount_id = discount_id
 
     def to_dict(self):
         return {
@@ -13,4 +14,5 @@ class EnergySales:
             "energy_sold": str(self.energy_sold),
             "price_per_kWh": str(self.price_per_kWh),
             "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "discount_id": self.discount_id,
         }

@@ -16,4 +16,5 @@ class OwnerHasStationService:
     def get_stations_for_owner(self, owner_id):
         return self.dao.get_stations_for_owner(owner_id)
 
-
+    def add_owner_station_via_procedure(self, owner_name, owner_email, installation_date):
+        self.dao.call_insert_owner_station_procedure(owner_name, owner_email, installation_date)

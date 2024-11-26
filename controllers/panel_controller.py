@@ -22,6 +22,24 @@ def create_panel_controller(mysql):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    @panel_controller.route('/panel/add_procedure', methods=['POST'])
+    def add_panel_via_procedure():
+        data = request.json
+        if not data or 'station_id' not in data or 'panel_type' not in data or 'installation_date' not in data or 'power' not in data or 'usage_duration' not in data:
+            return jsonify({"error": "Invalid data"}), 400
+
+        try:
+            service.add_panel_via_procedure(
+                data["station_id"],
+                data["panel_type"],
+                data["installation_date"],
+                data["power"],
+                data["usage_duration"]
+            )
+            return jsonify({"message": "Panel added via procedure"}), 201
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
     @panel_controller.route('/panel/<int:panel_id>', methods=['PUT'])
     def update_panel(panel_id):
         data = request.json

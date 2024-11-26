@@ -1,5 +1,5 @@
 from models.owner_has_station import OwnerHasStation
-from models.solar_station import SolarStation 
+from models.solar_station import SolarStation
 
 class OwnerHasStationDAO:
     def __init__(self, mysql):
@@ -28,14 +28,36 @@ class OwnerHasStationDAO:
     def get_stations_for_owner(self, owner_id):
         cur = self.mysql.connection.cursor()
         cur.execute("""
-            SELECT s.id, s.household_id, s.installation_date
-            FROM solar_station s
-            JOIN owner_has_station o ON s.id = o.station_id
-            WHERE o.owner_id = %s
+            SELECT 
+                o.id AS owner_id, o.name AS owner_name, o.email AS owner_email,
+                s.id AS station_id, s.household_id, s.installation_date
+            FROM owner o
+            JOIN owner_has_station ohs ON o.id = ohs.owner_id
+            JOIN solar_station s ON ohs.station_id = s.id
+            WHERE o.id = %s
         """, (owner_id,))
-        stations = cur.fetchall()
+        rows = cur.fetchall()
         cur.close()
-        
-        return [SolarStation(id=row[0], household_id=row[1], installation_date=row[2]) for row in stations]
 
+        result = []
+        for row in rows:
+            result.append({
+                "owner": {
+                    "id": row[0],
+                    "name": row[1],
+                    "email": row[2]
+                },
+                "solar_station": {
+                    "id": row[3],
+                    "household_id": row[4],
+                    "installation_date": row[5].isoformat() if row[5] else None
+                }
+            })
+        return result
 
+          # Виклик збереженої процедури insert_owner_station_link
+    def call_insert_owner_station_procedure(self, owner_name, owner_email, installation_date):
+        cur = self.mysql.connection.cursor()
+        cur.callproc('insert_owner_station_link', [owner_name, owner_email, installation_date])
+        self.mysql.connection.commit()
+        cur.close()

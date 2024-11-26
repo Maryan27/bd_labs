@@ -15,3 +15,21 @@ class BatteryChargeLevelService:
 
     def remove_charge_level(self, charge_level_id):
         return self.dao.delete_charge_level(charge_level_id)
+
+    def get_column_stat(self, table_name, operation):
+        """
+        Викликає збережену процедуру для обчислення MAX, MIN, SUM, AVG.
+        :param table_name: Назва таблиці.
+        :param operation: Тип операції (MAX, MIN, SUM, AVG).
+        :return: Словник з результатом.
+        """
+        cur = self.dao.mysql.connection.cursor()
+        try:
+            # Виклик збереженої процедури
+            cur.callproc('execute_column_stat_dynamic', [table_name, operation])
+            result = cur.fetchall()
+        finally:
+            cur.close()
+        # Повернення результату у вигляді словника
+        return {"operation": operation, "result": result[0][0]}
+   

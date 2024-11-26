@@ -19,6 +19,13 @@ class PanelDAO:
         self.mysql.connection.commit()
         cur.close()
 
+    def call_insert_panel_procedure(self, station_id, panel_type, installation_date, power, usage_duration):
+        """Викликає збережену процедуру insert_into_panel"""
+        cur = self.mysql.connection.cursor()
+        cur.callproc('insert_into_panel', [station_id, panel_type, installation_date, power, usage_duration])
+        self.mysql.connection.commit()
+        cur.close()
+
     def update_panel(self, panel_id, panel):
         cur = self.mysql.connection.cursor()
         cur.execute("UPDATE panel SET station_id = %s, panel_type = %s, installation_date = %s, power = %s, usage_duration = %s WHERE id = %s", 

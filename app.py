@@ -10,8 +10,11 @@ from controllers.battery_charge_level_controller import create_battery_charge_le
 from controllers.panel_tilt_angle_controller import create_panel_tilt_angle_controller
 from controllers.energy_sales_controller import create_energy_sales_controller
 from controllers.owner_has_station_controller import create_owner_has_station_controller
+from controllers.discount_controller import create_discount_controller
+from controllers.dynamic_tables_controller import create_dynamic_tables_controller
 from flask_mysqldb import MySQL
-
+ 
+# Ініціалізація Flask-додатку
 app = Flask(__name__)
 app.config.from_object(Config)
 mysql = MySQL(app)
@@ -26,7 +29,7 @@ app.register_blueprint(household_owner_controller)
 solar_station_controller = create_solar_station_controller(mysql)
 app.register_blueprint(solar_station_controller)
 
-panel_controller = create_panel_controller(mysql)
+panel_controller = create_panel_controller(mysql)  
 app.register_blueprint(panel_controller)
 
 battery_controller = create_battery_controller(mysql)
@@ -46,6 +49,12 @@ app.register_blueprint(energy_sales_controller)
 
 owner_has_station_controller = create_owner_has_station_controller(mysql)
 app.register_blueprint(owner_has_station_controller)
+
+discount_controller = create_discount_controller(mysql)
+app.register_blueprint(discount_controller)
+
+dynamic_tables_controller = create_dynamic_tables_controller(mysql)
+app.register_blueprint(dynamic_tables_controller)
 
 if __name__ == '__main__':
     app.run(debug=True)

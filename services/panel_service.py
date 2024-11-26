@@ -10,6 +10,10 @@ class PanelService:
     def add_panel(self, panel):
         return self.dao.insert_panel(panel)
 
+    def add_panel_via_procedure(self, station_id, panel_type, installation_date, power, usage_duration):
+        """Додає панель через збережену процедуру"""
+        self.dao.call_insert_panel_procedure(station_id, panel_type, installation_date, power, usage_duration)
+
     def modify_panel(self, panel_id, panel):
         return self.dao.update_panel(panel_id, panel)
 

@@ -42,4 +42,18 @@ def create_battery_charge_level_controller(mysql):
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 
+    @battery_charge_level_controller.route('/battery_charge_level/stats', methods=['GET'])
+    def get_column_stats():
+        table_name = request.args.get('table_name')
+        operation = request.args.get('operation')
+
+        if not table_name or not operation:
+            return jsonify({"error": "Missing 'table_name' or 'operation' parameter"}), 400
+
+        try:
+            result = service.get_column_stat(table_name, operation)
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
     return battery_charge_level_controller
